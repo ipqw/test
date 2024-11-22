@@ -1,6 +1,4 @@
-import { Battery } from "./Battery";
-import { Player } from "./Player";
-import { Wall } from "./Wall";
+import { Player } from "./Player.js";
 
 export class Game {
     width;
@@ -25,7 +23,7 @@ export class Game {
         if (ctx && !this.player.isDestroyed) {
             this.draw(ctx);
             this.player.update(ctx);
-            if (this.player.power === 0) {
+            if (this.player.power <= 0) {
                 this.player.isDestroyed = true;
             }
             this.batteries.forEach((el, index) => {
@@ -36,7 +34,11 @@ export class Game {
                     this.player.y <= el.y + el.height
                 ) {
                     el.isDestroyed = true;
-                    this.player.power += 5;
+                    if(this.player.power + 5 > 100){
+                        this.player.power = 100
+                    } else {
+                        this.player.power += 5;
+                    }
                     this.batteries.splice(index, 1);
                 }
                 el.update(ctx);

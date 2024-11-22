@@ -1,4 +1,4 @@
-import { randomInt } from "../assets/functions";
+import { randomInt } from "../index.js";
 
 export class Battery {
     x = 1550;

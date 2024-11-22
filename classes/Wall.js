@@ -1,4 +1,4 @@
-import { randomInt } from "../assets/functions";
+import { randomInt } from "../index.js";
 
 export class Wall {
     x = 1200;

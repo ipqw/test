@@ -7,7 +7,47 @@
     <title>Document</title>
 </head>
 <body>
-    <canvas class="canvas" id="canvas"></canvas>
+    <div class="screens">
+        <div
+            id="welcomeScreen"
+            class="screen-wrapper">
+            <div class="screen">
+                <div>
+                    <span>Ваше имя: </span>
+                    <input
+                        id="nameInput"
+                        type="text"
+                    />
+                </div>
+                <button id="startBtn">
+                    Продолжить
+                </button>
+            </div>
+        </div>
+        <div  
+            id="endScreen"
+            class="screen-wrapper hidden">
+            <div class="screen">
+                <p>Игра окончена</p>
+                <p id="endTimer">
+                    Время:
+                </p>
+                <button id="restartBtn">
+                    Начать заново
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="game" class="game hidden">
+        <div class="display">
+            <p id="name">Имя: </p>
+            <p id="power">Заряд: 50%</p>
+            <p id="timer">
+                Время: 00:00
+            </p>
+        </div>
+        <canvas width="1000" height="800" class="canvas" id="canvas"></canvas>
+    </div>
     <script type="module" src="./index.js"></script>
 </body>
 </html>
