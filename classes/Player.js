@@ -6,6 +6,7 @@ export class Player {
     width = 30;
     height = 30;
     isDestroyed = false;
+    isEnded = false
     setY = (y) => {
         this.y += y * this.speed;
     };

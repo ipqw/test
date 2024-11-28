@@ -4,23 +4,30 @@ import { Wall } from "./classes/Wall.js";
 
 const canvas = document.getElementById('canvas')
 const timerSpan = document.getElementById('timer')
-const endTimerSpan = document.getElementById('endTimer')
+const loseTimerSpan = document.getElementById('loseTimer')
+const loseNameSpan = document.getElementById('loseName')
 const powerSpan = document.getElementById('power')
 const nameSpan = document.getElementById('name')
 const startBtn = document.getElementById('startBtn')
-const restartBtn = document.getElementById('restartBtn')
+const restartBtns = document.getElementsByName('restartBtn')
 const welcomeScreen = document.getElementById('welcomeScreen')
 const endScreen = document.getElementById('endScreen')
+const loseScreen = document.getElementById('loseScreen')
 const gameDiv = document.getElementById('game')
 const ctx = canvas.getContext('2d')
+const nameInput = document.getElementById('nameInput')
 
-let game = new Game('qwe')
-let name = 'qwe'
+let game
+let name = ''
 
 let isWKeyPressed = false;
 let isSKeyPressed = false;
 let isAKeyPressed = false;
 let isDKeyPressed = false;
+
+nameInput.addEventListener('change', (el) => {
+    name = el.target.value
+})
 
 export const randomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -50,7 +57,7 @@ const timerInit = () => {
 };
 
 const animate = () => {
-    if (canvas && !game.player.isDestroyed) {
+    if (canvas && !game.player.isDestroyed && !game.player.isEnded) {
         requestAnimationFrame(animate);
         if (game && canvas) {
             // movement
@@ -69,10 +76,13 @@ const animate = () => {
             powerSpan.innerHTML = `Заряд: ${game.player.power}%`
             game.update(ctx);
         }
-    } else{
+    } else if(game.player.isDestroyed){
         endScreen.classList.remove('hidden')
+    } else {
+        loseScreen.classList.remove('hidden')
+        loseNameSpan.innerHTML = `Ваше имя: ${name}`
         const timer = new Date(game?.startTime ? new Date().getTime() - game?.startTime: 0,).getSeconds()
-        endTimerSpan.innerHTML = `Время: ${Math.floor(timer / 60) < 10
+        loseTimerSpan.innerHTML = `Время: ${Math.floor(timer / 60) < 10
                 ? `0${Math.floor(timer / 60)}`
                 : Math.floor(timer / 60)}:${timer % 60 < 10 ? `0${timer % 60}` : timer % 60}`
     }
@@ -109,14 +119,16 @@ const keyupEvent = (event) => {
 };
 
 const startGame = () => {
-    game = new Game('qwe');
-    nameSpan.innerHTML = `Имя: ${name}`
-    timerInit();
-    animate();
-    spawnWallsAndBatteries();
-    // movement
-    document.addEventListener("keydown", keydownEvent);
-    document.addEventListener("keyup", keyupEvent);
+    if(name){
+        game = new Game('qwe');
+        nameSpan.innerHTML = `Имя: ${name}`
+        timerInit();
+        animate();
+        spawnWallsAndBatteries();
+        // movement
+        document.addEventListener("keydown", keydownEvent);
+        document.addEventListener("keyup", keyupEvent);
+    }
 };
 const restartGame = () => {
     document.removeEventListener("keydown", keydownEvent);
@@ -129,8 +141,10 @@ startBtn.addEventListener('click', () => {
     gameDiv.classList.remove('hidden')
     startGame();
 })
-restartBtn.addEventListener('click', () => {
-    endScreen.classList.add('hidden')
-    restartGame();
-    isEndScreenVisible = false;
+restartBtns.forEach((el) => {
+    el.addEventListener('click', () => {
+        endScreen.classList.add('hidden')
+        loseScreen.classList.add('hidden')
+        restartGame();
+    })
 })

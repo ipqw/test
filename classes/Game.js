@@ -24,7 +24,7 @@ export class Game {
             this.draw(ctx);
             this.player.update(ctx);
             if (this.player.power <= 0) {
-                this.player.isDestroyed = true;
+                this.player.isEnded = true;
             }
             this.batteries.forEach((el, index) => {
                 if (
